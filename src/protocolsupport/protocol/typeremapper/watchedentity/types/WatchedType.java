@@ -13,19 +13,19 @@ public enum WatchedType {
 	ENTITY(EType.NONE, -1),
 	LIVING(EType.NONE, -1, WatchedType.ENTITY),
 	INSENTIENT(EType.NONE, -1, WatchedType.LIVING),
-	PLAYER(EType.NONE, -1, WatchedType.LIVING),
+	PLAYER(EType.NONE, -1,  EntityType.PLAYER, WatchedType.LIVING),
 	AGEABLE(EType.NONE, -1, WatchedType.INSENTIENT),
 	TAMEABLE(EType.NONE, -1, WatchedType.AGEABLE),
 	ARMOR_STAND(EType.NONE, -1, WatchedType.LIVING),
-	COW(EType.MOB, EntityType.COW, WatchedType.AGEABLE),
-	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, WatchedType.COW),
-	CHICKEN(EType.MOB, EntityType.CHICKEN, WatchedType.AGEABLE),
-	SQUID(EType.MOB, EntityType.SQUID, WatchedType.INSENTIENT),
 	BASE_HORSE(EType.NONE, -1, WatchedType.AGEABLE),
 	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
 	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
 	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
 	// Mobs (Network and game values are the same)
+	COW(EType.MOB, EntityType.COW, WatchedType.AGEABLE),
+	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, WatchedType.COW),
+	CHICKEN(EType.MOB, EntityType.CHICKEN, WatchedType.AGEABLE),
+	SQUID(EType.MOB, EntityType.SQUID, WatchedType.INSENTIENT),
 	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
 	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),
 	SKELETON_HORSE(EType.MOB, EntityType.SKELETON_HORSE, BATTLE_HORSE),
@@ -153,7 +153,7 @@ public enum WatchedType {
 	/***
 	 * Gets the type's bukkitTypeId.
 	 *
-	 * @return the bukkit typeId of the WatchedType or 0.
+	 * @return the bukkit typeId of the WatchedType or -1.
 	 */
 	@SuppressWarnings("deprecation")
 	public int getBukkitTypeId() {
