@@ -1,8 +1,13 @@
 package protocolsupport.protocol.typeremapper.id;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 
 import gnu.trove.map.hash.TIntIntHashMap;
+import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRegistry.WatchedRemap;
+import protocolsupport.protocol.typeremapper.watchedentity.types.WatchedType;
 
 public class RemappingTable {
 
@@ -65,6 +70,27 @@ public class RemappingTable {
 			return table.getOrDefault(from, from);
 		}
 
+	}
+	
+	public static class WatchedRemappingTable extends RemappingTable {
+		
+		protected final EnumMap<WatchedType, ArrayList<WatchedRemap>> table = new EnumMap<>(WatchedType.class);
+		{
+			for (WatchedType t : WatchedType.values()) {
+				table.put(t, new ArrayList<WatchedRemap>());
+			}
+		}
+		
+		public List<WatchedRemap> getRemaps(WatchedType type) {
+			return table.get(type);
+		}
+		
+		public void addRemap(WatchedType type, WatchedRemap remap) {
+			table.get(type).add(remap);
+			if(type.getSuperType() != null){
+				table.get(type).addAll(getRemaps(type.getSuperType()));
+			}
+		}
 	}
 
 }
