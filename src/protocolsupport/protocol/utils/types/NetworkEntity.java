@@ -6,6 +6,7 @@ import org.bukkit.util.Vector;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.utils.Utils;
 
@@ -48,25 +49,74 @@ public class NetworkEntity {
 	public NetworkEntityType getType() {
 		return type;
 	}
+
+	private DataCache data = new DataCache();
 	
-	public boolean isOfType(NetworkEntityType typeToCheck) {
-		return type.isOfType(typeToCheck);
+	public boolean isOfType(NetworkEntityType checkWith) {
+		return type.isOfType(checkWith);
 	}
 
-	private DataCache cache = new DataCache();
-
 	public DataCache getDataCache() {
-		return cache;
+		return data;
 	}
 	
 	public void updateDataCache(DataCache updateWith) {
-		cache = updateWith;
+		data = updateWith;
 	}
 	
 	public void updateMetadata(TIntObjectMap<DataWatcherObject<?>> updateWith) {
-		cache.updateMeta(updateWith);
+		data.updateMeta(updateWith);
 	}
 
+	private Vector position;
+	private Byte headYaw;
+	private Byte yaw;
+	private Byte pitch;
+	private Boolean onGround = true;
+	
+	
+	public void updatePosition(Vector updateWith) {
+		position = updateWith;
+	}
+	
+	public void updateRelPosition(int relX, int relY, int relZ) {
+		//X and Y are known. Relative is send (a * 32 - x * 32) * 128 = y                   y / 128 = a32 - x32         (y/128) + x32 = a 32               ((y / 128) + 32x) / 32 = a
+		position = new Vector(((relX / 128) + (position.getX() * 32)) / 32, ((relY / 128) + (position.getY() * 32)) / 32, ((relZ / 128) + (position.getZ() * 32)) / 32);
+	}
+	
+	public Vector getPosition() {
+		return position;
+	}
+	
+	public void updateRotation(byte updateYaw, byte updatePitch) {
+		yaw = updateYaw;
+		pitch = updatePitch;
+	}
+	
+	public void updateHeadYaw(byte updateWith) {
+		headYaw = updateWith;
+	}
+	
+	public byte getHeadYaw() {
+		if(headYaw == null) return yaw;
+		return headYaw;
+	}
+	
+	public byte getYaw() {
+		return yaw;
+	}
+	
+	public byte getPitch() {
+		return pitch;
+	}
+	
+	public void updateOnGround(boolean updateWith) {
+		onGround = updateWith;
+	}
+	
+	public boolean getOnGround() {
+		return onGround;
+	}
 	
 	@Override
 	public String toString() {

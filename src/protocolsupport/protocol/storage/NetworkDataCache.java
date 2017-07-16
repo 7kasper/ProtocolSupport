@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.util.Vector;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.events.PlayerPropertiesResolveEvent.ProfileProperty;
@@ -84,6 +86,37 @@ public class NetworkDataCache {
 	public void updateWatchedDataCache(int entityId, DataCache updateWith) {
 		watchedEntities.get(entityId).updateDataCache(updateWith);
 	}
+		
+	public void addWatchedEntity(NetworkEntity entity, Vector pos, byte yaw, byte pitch) {
+		entity.updatePosition(pos);
+		entity.updateRotation(yaw, pitch);
+		addWatchedEntity(entity);
+	}
+	
+	public void updateWatchedPosition(int entityId, Vector updateWith) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updatePosition(updateWith);
+	}
+	
+	public void updateWatchedRelPosition(int entityId, int relX, int relY, int relZ) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateRelPosition(relX, relY, relZ);
+	}
+	
+	public void updateWatchedRotation(int entityId, byte yaw, byte pitch) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateRotation(yaw, pitch);
+	}
+	
+	public void updateWatchedHeadRotation(int entityId, byte headYaw) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateHeadYaw(headYaw);
+	}
+	
+	public void updateWatchedOnGround(int entityId, boolean onGround) {
+		if(watchedEntities.containsKey(entityId))
+		watchedEntities.get(entityId).updateOnGround(onGround);
+	}
 
 	public void addWatchedSelfPlayer(NetworkEntity player) {
 		this.player = player;
@@ -111,6 +144,10 @@ public class NetworkDataCache {
 
 	public NetworkEntity getWatchedEntity(int entityId) {
 		return watchedEntities.get(entityId);
+	}
+	
+	public boolean containsWatchedEntity(int entityId) {
+		return watchedEntities.containsKey(entityId);
 	}
 
 	public void removeWatchedEntities(int[] entityIds) {
