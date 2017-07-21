@@ -7,6 +7,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.util.Vector;
+
 import gnu.trove.map.TIntObjectMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.watchedentity.remapper.value.IndexValueRemapper;
@@ -142,20 +144,36 @@ public enum SpecificRemapper {
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 16) {}, ProtocolVersionsHelper.BEFORE_1_9)
 	),
 	ARMOR_STAND(NetworkEntityType.ARMOR_STAND, SpecificRemapper.LIVING,
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.ArmorStand.FLAGS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new DataWatcherDataRemapper() {
+			@Override
+			public void remap(NetworkEntity entity, TIntObjectMap<DataWatcherObject<?>> original,TIntObjectMap<DataWatcherObject<?>> remapped) {
+				if(original.containsKey(DataWatcherObjectIndex.ArmorStand.FLAGS)) {
+					if((((Byte) original.get(DataWatcherObjectIndex.ArmorStand.FLAGS).getValue()) & (1 << (1 - 1))) != 0) {
+						//Small armorstand.
+						if(original.containsKey(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT)) {
+							Vector vector = (Vector) (original.get(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT).getValue());
+							original.put(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, new DataWatcherObjectVector3f(vector.subtract(new Vector(20, 0, 0))));
+						}
+					}
+				}
+			} 
+		}, ProtocolVersionsHelper.RANGE__1_8__1_9),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.ArmorStand.FLAGS, 10) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.HEAD_ROT, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.HEAD_ROT, 11) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.BODY_ROT, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.BODY_ROT, 12) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.LEFT_ARM_ROT, 14) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.LEFT_ARM_ROT, 13) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, 15) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, 14) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.LEFT_LEG_ROT, 16) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
 		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.LEFT_LEG_ROT, 15) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 17) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
-		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 16) {}, ProtocolVersionsHelper.RANGE__1_8__1_9)
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 16) {}, ProtocolVersionsHelper.RANGE__1_8__1_9),
+		
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectByte>(DataWatcherObjectIndex.ArmorStand.FLAGS, 11) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.HEAD_ROT, 12) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.BODY_ROT, 13) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.LEFT_ARM_ROT, 14) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_ARM_ROT, 15) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.LEFT_LEG_ROT, 16) {}, ProtocolVersionsHelper.RANGE__1_10__1_12),
+		new Entry(new IndexValueRemapperNoOp<DataWatcherObjectVector3f>(DataWatcherObjectIndex.ArmorStand.RIGHT_LEG_ROT, 17) {}, ProtocolVersionsHelper.RANGE__1_10__1_12)
+		
 	),
 	COW(NetworkEntityType.COW, SpecificRemapper.AGEABLE),
 	MUSHROOM_COW(NetworkEntityType.MUSHROOM_COW, SpecificRemapper.COW),

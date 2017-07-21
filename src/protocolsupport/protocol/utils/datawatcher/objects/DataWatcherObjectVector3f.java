@@ -7,6 +7,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 
 public class DataWatcherObjectVector3f extends DataWatcherObject<Vector> {
+	
+	public DataWatcherObjectVector3f() {
+	}
+	
+	public DataWatcherObjectVector3f(Vector vector) {
+		this.value = vector;
+	}
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
