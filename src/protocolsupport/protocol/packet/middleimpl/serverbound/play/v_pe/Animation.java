@@ -9,8 +9,11 @@ public class Animation extends MiddleAnimation {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata, ProtocolVersion version) {
-		VarNumberSerializer.readSVarInt(clientdata);
+		int action = VarNumberSerializer.readSVarInt(clientdata);
 		VarNumberSerializer.readVarLong(clientdata);
+		if((action & 0x80) != 0) {
+			MiscSerializer.readLFloat(clientdata);
+		}
 	}
 
 }
