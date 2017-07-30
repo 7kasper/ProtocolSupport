@@ -114,6 +114,26 @@ public class PEDataValues {
 	}
 
 	static {
+		//Pistons wrong way
+		registerBlockRemap(33, 3, 33, 2);
+		registerBlockRemap(33, 2, 33, 3);
+		registerBlockRemap(33, 5, 33, 4);
+		registerBlockRemap(33, 4, 33, 5);
+		//Pistons Extended, wrong way.
+		registerBlockRemap(33, 11, 33, 10);
+		registerBlockRemap(33, 10, 33, 11);
+		registerBlockRemap(33, 13, 33, 12);
+		registerBlockRemap(33, 12, 33, 13);
+		//Sticky pistons wrong way
+		registerBlockRemap(29, 3, 29, 2);
+		registerBlockRemap(29, 2, 29, 3);
+		registerBlockRemap(29, 5, 29, 4);
+		registerBlockRemap(29, 4, 29, 5);
+		//Sticky Pistons Extended, wrong way.
+		registerBlockRemap(29, 11, 29, 10);
+		registerBlockRemap(29, 10, 29, 11);
+		registerBlockRemap(29, 13, 29, 12);
+		registerBlockRemap(29, 12, 29, 13);
 		// Nether slab -> Quartz slab
 		registerBlockRemap(44, 7, 44, 6);
 		registerBlockRemap(44, 14, 44, 15);
